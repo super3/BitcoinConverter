@@ -12,41 +12,78 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Bitcoin_Converter
 {
     /// <summary>
-    /// A basic page that provides characteristics common to most applications.
+    /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Bitcoin_Converter.Common.LayoutAwarePage
+    public sealed partial class MainPage : Page
     {
+        public double rate = 11.07;
+        public bool flag = false;
+
         public MainPage()
         {
             this.InitializeComponent();
         }
 
         /// <summary>
-        /// Populates the page with content passed during navigation.  Any saved state is also
-        /// provided when recreating a page from a prior session.
+        /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
-        /// <param name="navigationParameter">The parameter value passed to
-        /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested.
-        /// </param>
-        /// <param name="pageState">A dictionary of state preserved by this page during an earlier
-        /// session.  This will be null the first time a page is visited.</param>
-        protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
+        /// <param name="e">Event data that describes how this page was reached.  The Parameter
+        /// property is typically used to configure the page.</param>
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
         }
 
-        /// <summary>
-        /// Preserves state associated with this page in case the application is suspended or the
-        /// page is discarded from the navigation cache.  Values must conform to the serialization
-        /// requirements of <see cref="SuspensionManager.SessionState"/>.
-        /// </summary>
-        /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
-        protected override void SaveState(Dictionary<String, Object> pageState)
+        private void btcBox_TextChanged(object sender, Windows.UI.Xaml.Controls.TextChangedEventArgs e)
         {
+            if (!flag)
+            {
+
+                try
+                {
+                    double btc = double.Parse(btcBox.Text);
+                    usdBox.Text = Math.Round((rate * btc), 3).ToString();
+                    flag = true;
+                }
+                catch
+                {
+                    // Do Nothing 
+                }
+            }
+            else
+            {
+                flag = false;
+            }
+        }
+
+        private void usdBox_TextChanged(object sender, Windows.UI.Xaml.Controls.TextChangedEventArgs e)
+        {
+            if (!flag)
+            {
+                try
+                {
+                    double usd = double.Parse(usdBox.Text);
+                    btcBox.Text = Math.Round((usd / rate), 3).ToString();
+                    flag = true;
+                }
+                catch
+                {
+                    // Do Nothing 
+                }
+            }
+            else
+            {
+                flag = false;
+            }
+        }
+
+        private void usdBox_DoubleTapped(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
+        {
+            // TODO: Add event handler implementation here.
         }
     }
 }
